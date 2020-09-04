@@ -20,44 +20,77 @@ It is elastic search 5.2.2 payload plugin
 curl -XPUT 'localhost:9200/test' -d '
 {
   "mappings": {
+ 
     "mytype":{
+
     "properties": {
+
       "content1": {
+
         "type": "text",
+
         "term_vector": "with_positions_payloads",
+
         "analyzer": "payload_delimiter",
+
         "similarity" : "my_payload_similarity",
+
         "norms": false
+
       },
+
       "content2": {
+
         "type": "text",
+
         "term_vector": "with_positions_payloads",
+
         "analyzer": "payload_delimiter",
+
         "similarity" : "my_payload_similarity",
+
         "norms": false
+
       },
+
       "content3": {
+
         "type": "text",
+
         "term_vector": "with_positions_payloads",
+
         "analyzer": "payload_delimiter",
+
         "similarity" : "my_payload_similarity",
+
         "norms": false
+
       }
     }
   }
   },
   "settings": {
+
      "number_of_shards" : "1",
+
      "similarity" : {
+
         "my_payload_similarity" : {
+
              "type" : "customer-similarity"
+
          }
      },
     "analysis": {
+
       "analyzer": {
+
         "payload_delimiter": {
+
           "tokenizer": "whitespace",
+
           "filter": [ "delimited_payload_filter" ]
+
         }
       }
     }
@@ -69,71 +102,106 @@ curl -XPUT 'localhost:9200/test' -d '
 curl -XPUT 'localhost:9200/test/my_type/1' -d '
 {
     "content1" : "1|0.3 2|0.2 3|0.1",
+
     "content2" : "2|0.2 3|0.1",
+
     "content3" : "1|0.3 2|0.2 3|0.1"
+
 }
 '
 
 curl -XPUT 'localhost:9200/test/my_type/2' -d '
 {
     "content1" : "1|0.2 2|0.3 3|0.2",
+
     "content2" : "2|0.3 3|0.2",
+
     "content3" : "1|0.2 2|0.3 3|0.2"
+
 }
 '
 
 curl -XPUT 'localhost:9200/test/my_type/3' -d '
 {
     "content1" : "1|0.1 2|0.1 3|0.3",
+
     "content2" : "2|0.1 3|0.3",
+
     "content3" : "1|0.1 2|0.1 3|0.3"
+
 }
 '
 
 curl -XPUT 'localhost:9200/test/my_type/4' -d '
 {
+
     "content1" : "2|0.1 3|0.3",
+
     "content2" : "1|0.3 3|0.3",
+
     "content3" : "1|0.1 2|0.1 3|0.3"
+
 }
 '
 
 curl -XPUT 'localhost:9200/test/my_type/5' -d '
 {
+
     "content1" : "2|0.1 3|0.3",
+
     "content2" : "1|0.2 3|0.3",
+
     "content3" : "1|0.1 2|0.1 3|0.3"
+
 }
 '
 
 curl -XPUT 'localhost:9200/test/my_type/6' -d '
 {
+
     "content1" : "2|0.1 3|0.3",
+
     "content2" : "1|0.1 3|0.3",
+
     "content3" : "1|0.1 2|0.1 3|0.3"
+
 }
 '
 2.4
 curl -XGET 'localhost:9200/test/my_type/_search?pretty' -d '
 {
+
   "explain" : false,
+
   "query":
+
   {
   "function_score": {
+
     "query": {
+
        "bool": {
+
           "should":[
+
             {
+
               "payload_term":{ "content1" : "1"}
+
             },
+
             {
+
               "payload_term":{ "content2" : "1"}
+
             }
+
           ]
        }
      },
      "functions":[
         {
+
           "filter": { "term": { "content1": "1" }},
           "weight": 4
         },
