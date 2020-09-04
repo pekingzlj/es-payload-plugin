@@ -69,6 +69,7 @@ curl -XPUT 'localhost:9200/test' -d '
     }
   }
   },
+
   "settings": {
 
      "number_of_shards" : "1",
@@ -219,86 +220,162 @@ curl -XGET 'localhost:9200/test/my_type/_search?pretty' -d '
 
 result:
 {
+
   "took" : 2,
+
   "timed_out" : false,
+
   "_shards" : {
+
     "total" : 1,
+
     "successful" : 1,
+
     "failed" : 0
+
   },
+
   "hits" : {
+
     "total" : 6,
+
     "max_score" : 4.3,
+
     "hits" : [
+
       {
+
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "1",
+
         "_score" : 4.3,
+
         "_source" : {
+
           "content1" : "1|0.3 2|0.2 3|0.1",
+
           "content2" : "2|0.2 3|0.1",
+
           "content3" : "1|0.3 2|0.2 3|0.1"
+
         }
+
       },
+
       {
+
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "2",
+
         "_score" : 4.2,
+
         "_source" : {
+
           "content1" : "1|0.2 2|0.3 3|0.2",
+
           "content2" : "2|0.3 3|0.2",
+
           "content3" : "1|0.2 2|0.3 3|0.2"
         }
+
       },
+
       {
+
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "3",
+
         "_score" : 4.1,
+
         "_source" : {
+
           "content1" : "1|0.1 2|0.1 3|0.3",
+
           "content2" : "2|0.1 3|0.3",
+
           "content3" : "1|0.1 2|0.1 3|0.3"
+
         }
+
       },
+
       {
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "4",
+
         "_score" : 2.3,
+
         "_source" : {
+
           "content1" : "2|0.1 3|0.3",
+
           "content2" : "1|0.3 3|0.3",
+
           "content3" : "1|0.1 2|0.1 3|0.3"
+
         }
       },
+
       {
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "5",
+
         "_score" : 2.2,
+
         "_source" : {
+
           "content1" : "2|0.1 3|0.3",
+
           "content2" : "1|0.2 3|0.3",
+
           "content3" : "1|0.1 2|0.1 3|0.3"
+
         }
+
       },
+
       {
+
         "_index" : "test",
+
         "_type" : "my_type",
+
         "_id" : "6",
+
         "_score" : 2.1,
+
         "_source" : {
+
           "content1" : "2|0.1 3|0.3",
+
           "content2" : "1|0.1 3|0.3",
+
           "content3" : "1|0.1 2|0.1 3|0.3"
+
         }
+
       }
+
     ]
+
   }
+
 }
 
 
-见查询结果是按照bar 的payload进行排序的
+见查询结果是按照content 的payload进行排序的,保证了组间有序，小组内也有序
